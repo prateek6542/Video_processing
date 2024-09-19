@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Upload Success</title>
+</head>
+<body>
+    <h1>Video Uploaded Successfully!</h1>
+
+    <p>Your video has been uploaded and subtitles have been extracted successfully.</p>
+
+    <h2>Video Details:</h2>
+    <p><strong>Video File:</strong> {{ video.file.url }}</p>
+    <p><strong>Subtitles:</strong></p>
+    <pre>{{ video.subtitles }}</pre>
+
+    <a href="{% url 'upload_video' %}">Upload another video</a>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Uploaded Videos</title>
+    <script>
+      // Function to seek the video to the given timestamp
+      function seekToTimestamp(videoId, timestamp) {
+        const video = document.getElementById(videoId);
+        video.currentTime = timestamp;
+        video.play();
+      }
+
+      // Function to handle subtitle search
+      function searchSubtitles(videoId) {
+        const searchInput = document.querySelector(
+          `#search-input-${videoId}`
+        ).value;
+        const searchResultDiv = document.querySelector(
+          `#search-result-${videoId}`
+        );
+
+        fetch(`/search/${videoId}/?search=${encodeURIComponent(searchInput)}`)
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.timestamp !== null) {
+              searchResultDiv.innerHTML = `
+                            <p>Phrase found at ${data.timestamp} seconds.</p>
+                            <button onclick="seekToTimestamp('video-${videoId}', ${data.timestamp})">
+                                Jump to ${data.timestamp} seconds
+                            </button>
+                        `;
+            } else {
+              searchResultDiv.innerHTML = `<p>Phrase not found.</p>`;
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            searchResultDiv.innerHTML = `<p>There was an error searching for the phrase.</p>`;
+          });
+      }
+    </script>
+  </head>
+  <body>
+    <h1>Uploaded Videos</h1>
+    <ul>
+      {% for video in videos %}
+      <li>
+        <h3>{{ video.title }}</h3>
+        <video id="video-{{ video.id }}" width="600" controls>
+          <source src="{{ video.video_file.url }}" type="video/mp4" />
+        </video>
+
+        <!-- Search form -->
+        <form
+          onsubmit="event.preventDefault(); searchSubtitles({{ video.id }});"
+        >
+          <input
+            id="search-input-{{ video.id }}"
+            type="text"
+            name="search"
+            placeholder="Search subtitles..."
+          />
+          <button type="submit">Search</button>
+        </form>
+
+        <!-- Search result placeholder -->
+        <div id="search-result-{{ video.id }}"></div>
+      </li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>

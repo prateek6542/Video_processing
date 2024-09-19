@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Upload Error</title>
+</head>
+<body>
+    <h1>Video Upload Failed</h1>
+
+    <p>There was an error processing your video:</p>
+    <p><strong>Error Message:</strong> {{ message }}</p>
+
+    <a href="{% url 'upload_video' %}">Try again</a>
+</body>
+</html>
